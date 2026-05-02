@@ -1,0 +1,31 @@
+{
+  "name": "db-proyecto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "npx tailwindcss -i ./public/css/styles.css -o ./public/css/output.css --watch",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^9.2.1",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.1",
+    "mssql": "^12.5.0",
+    "postcss": "^8.5.13",
+    "pug": "^3.0.4",
+    "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

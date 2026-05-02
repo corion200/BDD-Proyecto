@@ -1,0 +1,53 @@
+<%- include('../partials/header') %>
+
+<div class="fade-in">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Inventario de Productos</h1>
+            <p class="page-desc">Listado general de productos agropecuarios</p>
+        </div>
+        <a href="/productos/nuevo" class="btn btn-success">
+            + Agregar Producto
+        </a>
+    </div>
+
+    <div class="grid-cards">
+        <% if (productos.length > 0) { %>
+            <% productos.forEach(function(producto) { %>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title"><%= producto.Nombre %></h2>
+                            <div style="margin-top: 0.5rem;">
+                                <% if (producto.Stock > 0) { %>
+                                    <span class="badge badge-blue">Stock: <%= producto.Stock %></span>
+                                <% } else { %>
+                                    <span class="badge badge-red">Agotado</span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="card-price">$<%= producto.Precio_Uni.toFixed(2) %></div>
+                    </div>
+                    
+                    <div class="card-info">
+                        <strong>Vencimiento:</strong> <%= new Date(producto.Fecha_Vencimiento).toLocaleDateString() %>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <a href="/productos/editar/<%= producto.Id_Producto %>" class="btn-text btn-edit">Editar</a>
+                        
+                        <form action="/productos/eliminar/<%= producto.Id_Producto %>?_method=DELETE" method="POST" style="margin: 0;">
+                            <button type="submit" class="btn-text btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="text-center" style="grid-column: 1 / -1; padding: 4rem; background: white; border-radius: 12px;">
+                <h3 style="color: #64748b;">No hay productos</h3>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

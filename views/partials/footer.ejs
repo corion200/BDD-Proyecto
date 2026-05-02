@@ -1,0 +1,18 @@
+    </main>
+        <!-- Script para resaltar el menú automáticamente -->
+    <script>
+        // Obtiene la URL actual (ej: /productos)
+        const currentPath = window.location.pathname;
+        
+        // Busca todos los enlaces del menú
+        const navLinks = document.querySelectorAll('#main-nav a');
+        
+        navLinks.forEach(link => {
+            // Si el enlace coincide con la URL actual, le pone la clase 'active'
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

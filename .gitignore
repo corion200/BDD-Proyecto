@@ -1,0 +1,32 @@
+# --- Dependencias ---
+# La carpeta de módulos es muy pesada y se descarga con npm install
+node_modules/
+
+# --- Archivos de Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Entorno de Desarrollo ---
+# Configuraciones específicas de tu editor (VS Code, IntelliJ, etc.)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Sistema Operativo ---
+# Archivos basura de Windows y Mac
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Archivos CSS Compilados (Opcional pero recomendado) ---
+# Como generamos el CSS con Tailwind, el archivo 'output.css' se genera solo.
+# No es necesario subirlo, se generará cuando otro haga 'npm run build-css'
+# Si quieres subirlo para que otros no tengan que compilar, borra esta línea:
+public/css/output.css
+
+# --- Archivos de Configuración Local ---
+# Si tienes un archivo con contraseñas específicas de tu PC, lo ignoras aquí.
+# .env

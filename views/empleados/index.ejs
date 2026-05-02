@@ -1,0 +1,40 @@
+<%- include('../partials/header') %>
+
+<div class="fade-in">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestión de Empleados</h1>
+            <p class="page-desc">Control de personal y nómina</p>
+        </div>
+        <a href="/empleados/nuevo" class="btn btn-success">
+            + Nuevo Empleado
+        </a>
+    </div>
+
+    <div class="grid-cards">
+        <% empleados.forEach(function(emp) { %>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title"><%= emp.Nombre %> <%= emp.Apellido %></h2>
+                        <span class="badge badge-blue" style="margin-top: 0.5rem;"><%= emp.Nivel_Academico %></span>
+                    </div>
+                    <div class="card-price">$<%= emp.Sueldo.toFixed(2) %></div>
+                </div>
+                
+                <div class="card-info">
+                    <p><strong>ID:</strong> <%= emp.Id_Empleado %></p>
+                    <p><strong>Teléfono:</strong> <%= emp.Telefono %></p>
+                </div>
+                
+                <div class="card-footer">
+                    <form action="/empleados/eliminar/<%= emp.Id_Empleado %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn-text btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

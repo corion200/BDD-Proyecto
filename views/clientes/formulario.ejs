@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="form-container fade-in">
+    <h1 class="page-title" style="margin-bottom: 2rem;"><%= titulo %></h1>
+
+    <form action="<%= accion %>" method="POST">
+        <div class="grid-cols-2">
+            <div class="form-group">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="Nombre" required class="form-input" value="<%= cliente ? cliente.Nombre : '' %>">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Apellido</label>
+                <input type="text" name="Apellido" required class="form-input" value="<%= cliente ? cliente.Apellido : '' %>">
+            </div>
+        </div>
+
+        <div class="grid-cols-2">
+            <div class="form-group">
+                <label class="form-label">DUI (Opcional)</label>
+                <input type="text" name="Dui" class="form-input" placeholder="00000000-0" value="<%= cliente ? cliente.Dui : '' %>">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Teléfono</label>
+                <input type="text" name="Telefono" required class="form-input" placeholder="0000-0000" value="<%= cliente ? cliente.Telefono : '' %>">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Correo Electrónico</label>
+            <input type="email" name="Correo" required class="form-input" value="<%= cliente ? cliente.Correo : '' %>">
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn btn-success" style="width: 100%;">Guardar Cliente</button>
+            <a href="/clientes" class="text-center mt-4" style="display: block; color: #64748b; text-decoration: none; margin-top: 1rem;">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

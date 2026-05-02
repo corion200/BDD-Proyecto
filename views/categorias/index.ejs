@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+
+<div class="fade-in">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Categorías de Productos</h1>
+            <p class="page-desc">Clasificación y organización de inventario</p>
+        </div>
+        <a href="/categorias/nuevo" class="btn btn-success">
+            + Nueva Categoría
+        </a>
+    </div>
+
+    <div class="grid-cards">
+        <% categorias.forEach(function(cat) { %>
+            <div class="card">
+                <div style="margin-bottom: 1rem;">
+                    <span class="badge badge-blue">ID: <%= cat.Id_Categoria %></span>
+                </div>
+                <h2 class="card-title" style="margin-bottom: 0.5rem;"><%= cat.Nombre %></h2>
+                <p class="page-desc" style="font-size: 0.9rem; min-height: 40px;"><%= cat.Descripcion %></p>
+                
+                <div class="card-footer">
+                    <form action="/categorias/eliminar/<%= cat.Id_Categoria %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn-text btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

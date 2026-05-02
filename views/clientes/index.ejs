@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<div class="fade-in">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestión de Clientes</h1>
+            <p class="page-desc">Directorio de clientes registrados</p>
+        </div>
+        <a href="/clientes/nuevo" class="btn btn-success">
+            + Nuevo Cliente
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>DUI</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% clientes.forEach(function(cliente) { %>
+                    <tr>
+                        <td style="font-weight: 600;"><%= cliente.Nombre %> <%= cliente.Apellido %></td>
+                        <td><%= cliente.Dui || 'N/A' %></td>
+                        <td><%= cliente.Telefono %></td>
+                        <td><%= cliente.Correo %></td>
+                        <td style="text-align: right;">
+                            <a href="/clientes/editar/<%= cliente.Id_Cliente %>" class="btn-text btn-edit">Editar</a>
+                            <form action="/clientes/eliminar/<%= cliente.Id_Cliente %>?_method=DELETE" method="POST" style="display: inline;">
+                                <button type="submit" class="btn-text btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

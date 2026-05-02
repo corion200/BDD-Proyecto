@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroVet Admin</title>
+    <style>
+        /* --- RESETEO Y GENERAL --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; display: flex; min-height: 100vh; }
+        
+        /* --- SIDEBAR (Barra Lateral) --- */
+        aside {
+            width: 260px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .logo-title { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem; }
+        .logo-subtitle { color: #94a3b8; font-size: 0.85rem; margin-bottom: 3rem; }
+        
+        /* --- MENÚ --- */
+        nav { flex: 1; }
+        nav ul { list-style: none; }
+        nav li { margin-bottom: 0.5rem; }
+        nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.25rem;
+            border-radius: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        nav a:hover { background-color: rgba(255,255,255,0.08); color: white; transform: translateX(4px); }
+        nav a.active { background-color: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+        
+        /* --- CONTENIDO PRINCIPAL --- */
+        main { flex: 1; padding: 3rem; background-color: #f8fafc; overflow-y: auto; }
+        
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+        .page-title { font-size: 2rem; font-weight: 700; color: #1e293b; }
+        .page-desc { color: #64748b; margin-top: 0.25rem; font-size: 0.95rem; }
+
+        /* --- TARJETAS (CARDS) --- */
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.75rem; }
+        
+        .card {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #10b981;
+        }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+        .card-title { font-size: 1.125rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+        .card-price { font-size: 1.5rem; font-weight: 800; color: #10b981; margin-top: 0.25rem; }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-blue { background-color: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+        .badge-red { background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        
+        .card-info { font-size: 0.9rem; color: #64748b; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #e2e8f0; }
+        
+        .card-footer { margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem; align-items: center; }
+
+        /* --- BOTONES (ESTILOS REALES) --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            letter-spacing: 0.2px;
+        }
+        
+        /* Botón Principal Verde */
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Botón de Texto (Editar/Eliminar) */
+        .btn-text {
+            background: transparent;
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+        }
+        .btn-edit { color: #4f46e5; }
+        .btn-edit:hover { background-color: #eef2ff; color: #3730a3; border-radius: 6px; }
+        
+        .btn-danger { color: #ef4444; }
+        .btn-danger:hover { background-color: #fef2f2; color: #b91c1c; border-radius: 6px; }
+
+        /* --- TABLAS --- */
+        .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #f8fafc; padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid #e2e8f0; }
+        td { padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 0.9rem; }
+        tr:hover { background-color: #f8fafc; }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- FORMULARIOS --- */
+        .form-container { max-width: 42rem; margin: 0 auto; background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #475569; }
+        .form-input { 
+            width: 100%; 
+            padding: 0.85rem 1.15rem; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            transition: all 0.2s; 
+            background-color: #f8fafc;
+        }
+        .form-input:focus { 
+            outline: none; 
+            border-color: #10b981; 
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); 
+            background-color: white;
+        }
+        
+        /* --- UTILIDADES --- */
+        .text-center { text-align: center; }
+        .mt-4 { margin-top: 1rem; }
+        .flex { display: flex; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .justify-end { justify-content: flex-end; }
+        .grid-cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+    </style>
+</head>
+<body>
+    <aside>
+        <div>
+            <div class="logo-title">AgroVet</div>
+            <div class="logo-subtitle">Sistema de Gestión</div>
+        </div>
+        
+        <nav id="main-nav">
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/productos">Productos</a></li>
+                <li><a href="/categorias">Categorías</a></li>
+                <li><a href="/clientes">Clientes</a></li>
+                <li><a href="/empleados">Empleados</a></li>
+            </ul>
+        </nav>
+        
+        <div style="text-align: center; color: #64748b; font-size: 0.75rem; margin-top: auto; padding-top: 2rem;">
+            v1.0.0
+        </div>
+
+        <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid #334155;">
+            <% if (user) { %>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;"><%= user.correo %></p>
+                <a href="/logout" style="color: #f87171; font-size: 0.9rem; text-decoration: none; display: block; padding: 0.5rem 0;">
+                    Cerrar Sesión
+                </a>
+            <% } %>
+        </div>
+    </aside>
+
+    <main>

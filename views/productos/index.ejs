@@ -36,7 +36,7 @@
                     <div class="card-footer">
                         <a href="/productos/editar/<%= producto.Id_Producto %>" class="btn-text btn-edit">Editar</a>
                         
-                        <form action="/productos/eliminar/<%= producto.Id_Producto %>?_method=DELETE" method="POST" style="margin: 0;">
+                        <form action="/productos/<%= producto.Id_Producto %>?_method=DELETE" method="POST" style="margin: 0;">
                             <button type="submit" class="btn-text btn-danger">Eliminar</button>
                         </form>
                     </div>

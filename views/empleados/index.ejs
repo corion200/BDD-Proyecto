@@ -28,7 +28,8 @@
                 </div>
                 
                 <div class="card-footer">
-                    <form action="/empleados/eliminar/<%= emp.Id_Empleado %>?_method=DELETE" method="POST">
+                    <a href="/empleados/editar/<%= emp.Id_Empleado %>" class="btn-text btn-edit">Editar</a>
+                    <form action="/empleados/eliminar/<%= emp.Id_Empleado %>?_method=DELETE" method="POST" style="display: inline;">
                         <button type="submit" class="btn-text btn-danger">Eliminar</button>
                     </form>
                 </div>

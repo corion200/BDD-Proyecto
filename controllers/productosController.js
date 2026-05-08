@@ -16,6 +16,11 @@ const mostrarFormularioCrear = (req, res) => {
 
 const crearProductoVista = async (req, res) => {
     const { Precio_Uni, Stock, Nombre, Fecha_Vencimiento } = req.body;
+
+    if (parseFloat(Precio_Uni) <= 0 || parseInt(Stock) < 0) {
+        return res.status(400).send('El precio debe ser mayor a 0 y el stock no puede ser negativo');
+    }
+
     try {
         const pool = await getConnection();
         await pool.execute(
@@ -50,6 +55,11 @@ const mostrarFormularioEditar = async (req, res) => {
 const actualizarProductoVista = async (req, res) => {
     const { id } = req.params;
     const { Precio_Uni, Stock, Nombre, Fecha_Vencimiento } = req.body;
+
+    if (parseFloat(Precio_Uni) <= 0 || parseInt(Stock) < 0) {
+        return res.status(400).send('El precio debe ser mayor a 0 y el stock no puede ser negativo');
+    }
+
     try {
         const pool = await getConnection();
         await pool.execute(
@@ -67,6 +77,11 @@ const eliminarProductoVista = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await getConnection();
+        
+        await pool.execute('DELETE FROM inv_Factura_P_Productos_Administrador WHERE Id_Productos3 = ?', [id]);
+        await pool.execute('DELETE FROM inv_Empleado_Producto WHERE Id_Producto1 = ?', [id]);
+        await pool.execute('DELETE FROM inv_Producto_Categoria WHERE Id_Producto2 = ?', [id]);
+        
         await pool.execute('DELETE FROM inv_Productos WHERE Id_Producto = ?', [id]);
         
         res.redirect('/productos');

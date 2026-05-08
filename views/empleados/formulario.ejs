@@ -6,15 +6,14 @@
     <form action="<%= accion %>" method="POST">
         <div class="grid-cols-2">
             <div class="form-group">
-                <label class="form-label">ID Empleado</label>
-                <input type="number" name="Id_Empleado" required class="form-input" value="<%= empleado ? empleado.Id_Empleado : '' %>">
-            </div>
-            <div class="form-group">
                 <label class="form-label">Nivel Académico</label>
                 <select name="Nivel_Academico" required class="form-input">
                     <option value="Bachillerato" <%= (empleado && empleado.Nivel_Academico === 'Bachillerato') ? 'selected' : '' %>>Bachillerato</option>
                     <option value="Superior" <%= (empleado && empleado.Nivel_Academico === 'Superior') ? 'selected' : '' %>>Superior</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <!-- Espacio vacío para mantener el grid o puedes poner otro campo aquí -->
             </div>
         </div>
 
@@ -32,17 +31,17 @@
         <div class="grid-cols-2">
             <div class="form-group">
                 <label class="form-label">DUI</label>
-                <input type="text" name="Dui" required class="form-input" value="<%= empleado ? empleado.Dui : '' %>">
+                <input type="text" name="Dui" required class="form-input" placeholder="00000000-0" pattern="[0-9]{8}-[0-9]{1}" title="Formato: 00000000-0" value="<%= empleado ? empleado.Dui : '' %>">
             </div>
             <div class="form-group">
                 <label class="form-label">Teléfono</label>
-                <input type="text" name="Telefono" required class="form-input" value="<%= empleado ? empleado.Telefono : '' %>">
+                <input type="text" name="Telefono" required class="form-input" placeholder="0000-0000" pattern="[267][0-9]{3}-[0-9]{4}" title="Formato: 0000-0000 (Debe iniciar con 2, 6 o 7)" value="<%= empleado ? empleado.Telefono : '' %>">
             </div>
         </div>
 
         <div class="form-group">
             <label class="form-label">Sueldo ($)</label>
-            <input type="number" step="0.01" name="Sueldo" required class="form-input" value="<%= empleado ? empleado.Sueldo : '' %>">
+            <input type="number" step="0.01" min="0.01" name="Sueldo" required class="form-input" value="<%= empleado ? empleado.Sueldo : '' %>">
         </div>
 
         <div style="margin-top: 2rem;">

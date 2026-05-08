@@ -18,11 +18,11 @@
         <div class="grid-cols-2">
             <div class="form-group">
                 <label class="form-label">DUI (Opcional)</label>
-                <input type="text" name="Dui" class="form-input" placeholder="00000000-0" value="<%= cliente ? cliente.Dui : '' %>">
+                <input type="text" name="Dui" class="form-input" placeholder="00000000-0" pattern="[0-9]{8}-[0-9]{1}" title="Formato: 00000000-0" value="<%= cliente ? cliente.Dui : '' %>">
             </div>
             <div class="form-group">
                 <label class="form-label">Teléfono</label>
-                <input type="text" name="Telefono" required class="form-input" placeholder="0000-0000" value="<%= cliente ? cliente.Telefono : '' %>">
+                <input type="text" name="Telefono" required class="form-input" placeholder="0000-0000" pattern="[267][0-9]{3}-[0-9]{4}" title="Formato: 0000-0000 (Debe iniciar con 2, 6 o 7)" value="<%= cliente ? cliente.Telefono : '' %>">
             </div>
         </div>
 

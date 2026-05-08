@@ -21,7 +21,8 @@
                 <p class="page-desc" style="font-size: 0.9rem; min-height: 40px;"><%= cat.Descripcion %></p>
                 
                 <div class="card-footer">
-                    <form action="/categorias/eliminar/<%= cat.Id_Categoria %>?_method=DELETE" method="POST">
+                    <a href="/categorias/editar/<%= cat.Id_Categoria %>" class="btn-text btn-edit">Editar</a>
+                    <form action="/categorias/eliminar/<%= cat.Id_Categoria %>?_method=DELETE" method="POST" style="display: inline;">
                         <button type="submit" class="btn-text btn-danger">Eliminar</button>
                     </form>
                 </div>

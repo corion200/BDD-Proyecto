@@ -92,6 +92,3 @@ DB-Proyecto/
 
 ## 📄 Licencia
 Este proyecto fue creado con fines educativos para el curso de Base de Datos.
-```
-
-¡Con esto tu repositorio tendrá una documentación profesional!

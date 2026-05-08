@@ -1,4 +1,4 @@
-const { getConnection, sql } = require('../conexion');
+const { getConnection } = require('../conexion');
 
 const mostrarLogin = (req, res) => {
     if (req.session.user) {
@@ -12,19 +12,15 @@ const iniciarSesion = async (req, res) => {
 
     try {
         const pool = await getConnection();
-        const result = await pool.request()
-            .input('correo', sql.VarChar, correo)
-            .query('SELECT * FROM Inventario.Administrador WHERE Correo = @correo');
+        const [rows] = await pool.execute('SELECT * FROM inv_Administrador WHERE Correo = ?', [correo]);
 
-        if (result.recordset.length === 0) {
+        if (rows.length === 0) {
             return res.render('auth/login', { error: 'Usuario no encontrado' });
         }
 
-        const admin = result.recordset[0];
+        const admin = rows[0];
 
-        // Comparación simple (En producción usar bcrypt)
-        if (contraseña === admin.Contraseña) {
-            // Guardar usuario en sesión
+        if (contraseña === admin.Contrasena) {
             req.session.user = {
                 id: admin.Id_Administrador,
                 correo: admin.Correo

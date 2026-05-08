@@ -1,32 +1,27 @@
-const { getConnection, sql } = require('../conexion');
+const { getConnection } = require('../conexion');
 
-// Mostrar lista de productos
 const obtenerProductosVista = async (req, res) => {
     try {
         const pool = await getConnection();
-        const result = await pool.request().query('SELECT * FROM Inventario.Productos');
-        res.render('productos/index', { productos: result.recordset });
+        const [productos] = await pool.execute('SELECT * FROM inv_Productos');
+        res.render('productos/index', { productos });
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-// Mostrar formulario para crear
 const mostrarFormularioCrear = (req, res) => {
     res.render('productos/formulario', { titulo: 'Nuevo Producto', accion: '/productos/nuevo', producto: null });
 };
 
-// Crear producto (INSERT)
 const crearProductoVista = async (req, res) => {
     const { Precio_Uni, Stock, Nombre, Fecha_Vencimiento } = req.body;
     try {
         const pool = await getConnection();
-        await pool.request()
-            .input('Precio_Uni', sql.Float, Precio_Uni)
-            .input('Stock', sql.Int, Stock)
-            .input('Nombre', sql.VarChar, Nombre)
-            .input('Fecha_Vencimiento', sql.Date, Fecha_Vencimiento)
-            .query('INSERT INTO Inventario.Productos (Precio_Uni, Stock, Nombre, Fecha_Vencimiento) VALUES (@Precio_Uni, @Stock, @Nombre, @Fecha_Vencimiento)');
+        await pool.execute(
+            'INSERT INTO inv_Productos (Precio_Uni, Stock, Nombre, Fecha_Vencimiento) VALUES (?, ?, ?, ?)', 
+            [Precio_Uni, Stock, Nombre, Fecha_Vencimiento]
+        );
         
         res.redirect('/productos');
     } catch (error) {
@@ -34,40 +29,33 @@ const crearProductoVista = async (req, res) => {
     }
 };
 
-// Mostrar formulario para editar
 const mostrarFormularioEditar = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await getConnection();
-        const result = await pool.request()
-            .input('id', sql.Int, id)
-            .query('SELECT * FROM Inventario.Productos WHERE Id_Producto = @id');
+        const [rows] = await pool.execute('SELECT * FROM inv_Productos WHERE Id_Producto = ?', [id]);
         
-        if (result.recordset.length === 0) return res.redirect('/productos');
+        if (rows.length === 0) return res.redirect('/productos');
         
         res.render('productos/formulario', { 
             titulo: 'Editar Producto', 
             accion: `/productos/editar/${id}?_method=PUT`, 
-            producto: result.recordset[0] 
+            producto: rows[0] 
         });
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-// Actualizar producto (UPDATE)
 const actualizarProductoVista = async (req, res) => {
     const { id } = req.params;
     const { Precio_Uni, Stock, Nombre, Fecha_Vencimiento } = req.body;
     try {
         const pool = await getConnection();
-        await pool.request()
-            .input('id', sql.Int, id)
-            .input('Precio_Uni', sql.Float, Precio_Uni)
-            .input('Stock', sql.Int, Stock)
-            .input('Nombre', sql.VarChar, Nombre)
-            .input('Fecha_Vencimiento', sql.Date, Fecha_Vencimiento)
-            .query('UPDATE Inventario.Productos SET Precio_Uni = @Precio_Uni, Stock = @Stock, Nombre = @Nombre, Fecha_Vencimiento = @Fecha_Vencimiento WHERE Id_Producto = @id');
+        await pool.execute(
+            'UPDATE inv_Productos SET Precio_Uni = ?, Stock = ?, Nombre = ?, Fecha_Vencimiento = ? WHERE Id_Producto = ?', 
+            [Precio_Uni, Stock, Nombre, Fecha_Vencimiento, id]
+        );
         
         res.redirect('/productos');
     } catch (error) {
@@ -75,14 +63,11 @@ const actualizarProductoVista = async (req, res) => {
     }
 };
 
-// Eliminar producto (DELETE)
 const eliminarProductoVista = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await getConnection();
-        await pool.request()
-            .input('id', sql.Int, id)
-            .query('DELETE FROM Inventario.Productos WHERE Id_Producto = @id');
+        await pool.execute('DELETE FROM inv_Productos WHERE Id_Producto = ?', [id]);
         
         res.redirect('/productos');
     } catch (error) {

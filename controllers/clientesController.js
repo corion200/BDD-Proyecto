@@ -1,10 +1,10 @@
-const { getConnection, sql } = require('../conexion');
+const { getConnection } = require('../conexion');
 
 const obtenerClientesVista = async (req, res) => {
     try {
         const pool = await getConnection();
-        const result = await pool.request().query('SELECT * FROM Ventas.Cliente');
-        res.render('clientes/index', { clientes: result.recordset });
+        const [clientes] = await pool.execute('SELECT * FROM vta_Clientes');
+        res.render('clientes/index', { clientes });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -18,16 +18,12 @@ const crearCliente = async (req, res) => {
     const { Nombre, Apellido, Dui, Correo, Telefono } = req.body;
     try {
         const pool = await getConnection();
-        // DUI puede ser NULL, asi que validamos si viene vacío
         const duiValue = Dui && Dui.trim() !== '' ? Dui : null;
 
-        await pool.request()
-            .input('Nombre', sql.VarChar, Nombre)
-            .input('Apellido', sql.VarChar, Apellido)
-            .input('Dui', sql.Char, duiValue)
-            .input('Correo', sql.VarChar, Correo)
-            .input('Telefono', sql.VarChar, Telefono)
-            .query('INSERT INTO Ventas.Cliente (Nombre, Apellido, Dui, Correo, Telefono) VALUES (@Nombre, @Apellido, @Dui, @Correo, @Telefono)');
+        await pool.execute(
+            'INSERT INTO vta_Clientes (Nombre, Apellido, Dui, Correo, Telefono) VALUES (?, ?, ?, ?, ?)', 
+            [Nombre, Apellido, duiValue, Correo, Telefono]
+        );
         
         res.redirect('/clientes');
     } catch (error) {
@@ -39,16 +35,14 @@ const mostrarFormularioEditarCliente = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await getConnection();
-        const result = await pool.request()
-            .input('id', sql.Int, id)
-            .query('SELECT * FROM Ventas.Cliente WHERE Id_Cliente = @id');
+        const [rows] = await pool.execute('SELECT * FROM vta_Clientes WHERE Id_Cliente = ?', [id]);
         
-        if (result.recordset.length === 0) return res.redirect('/clientes');
+        if (rows.length === 0) return res.redirect('/clientes');
         
         res.render('clientes/formulario', { 
             titulo: 'Editar Cliente', 
             accion: `/clientes/editar/${id}?_method=PUT`, 
-            cliente: result.recordset[0] 
+            cliente: rows[0] 
         });
     } catch (error) {
         res.status(500).send(error.message);
@@ -62,14 +56,10 @@ const actualizarCliente = async (req, res) => {
         const pool = await getConnection();
         const duiValue = Dui && Dui.trim() !== '' ? Dui : null;
 
-        await pool.request()
-            .input('id', sql.Int, id)
-            .input('Nombre', sql.VarChar, Nombre)
-            .input('Apellido', sql.VarChar, Apellido)
-            .input('Dui', sql.Char, duiValue)
-            .input('Correo', sql.VarChar, Correo)
-            .input('Telefono', sql.VarChar, Telefono)
-            .query('UPDATE Ventas.Cliente SET Nombre = @Nombre, Apellido = @Apellido, Dui = @Dui, Correo = @Correo, Telefono = @Telefono WHERE Id_Cliente = @id');
+        await pool.execute(
+            'UPDATE vta_Clientes SET Nombre = ?, Apellido = ?, Dui = ?, Correo = ?, Telefono = ? WHERE Id_Cliente = ?', 
+            [Nombre, Apellido, duiValue, Correo, Telefono, id]
+        );
         
         res.redirect('/clientes');
     } catch (error) {
@@ -81,9 +71,7 @@ const eliminarCliente = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await getConnection();
-        await pool.request()
-            .input('id', sql.Int, id)
-            .query('DELETE FROM Ventas.Cliente WHERE Id_Cliente = @id');
+        await pool.execute('DELETE FROM vta_Clientes WHERE Id_Cliente = ?', [id]);
         
         res.redirect('/clientes');
     } catch (error) {

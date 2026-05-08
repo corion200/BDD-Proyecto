@@ -1,32 +1,35 @@
-const sql = require('mssql');
+const mysql = require('mysql2/promise');
 
 const config = {
-    user: 'api_user',
-    password: 'TuPassword123',
-    server: 'localhost',
-    port: 1433,
+    host: 'localhost',
+    user: 'root',            
+    password: '',            
     database: 'Centro_Agricola_Veterinario',
-    options: {
-        encrypt: false,
-        trustServerCertificate: true
-    }
+    waitForConnections: true,
+    connectionLimit: 10, 
+    queueLimit: 0
 };
 
 let pool;
 
 async function getConnection() {
     try {
-        if (pool) return pool;
-        pool = await sql.connect(config);
-        console.log('Conexión a la base de datos establecida');
+        // En mysql2, el pool se crea de una sola vez y se reutiliza
+        if (!pool) {
+            pool = mysql.createPool(config);
+            console.log('Pool de conexiones a MySQL creado');
+        }
+        
+        // Devolvemos el pool directamente. 
+        // Nota: En mysql2 usas pool.execute() en lugar de pool.request()
         return pool;
     } catch (error) {
-        console.error('Error al conectar con la base de datos:', error);
+        console.error('Error al crear el pool de conexiones:', error);
         throw error;
     }
 }
 
 module.exports = {
     getConnection,
-    sql
+    mysql
 };
